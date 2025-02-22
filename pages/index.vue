@@ -9,8 +9,19 @@
         'black': cell.color === 'black',
         'purple': cell.color === 'purple'
       }"
-      @click="move(cell)"
     >
+      <BishopWhite v-if="cell.piece === 'bishop_white'" />
+      <BishopBlack v-if="cell.piece === 'bishop_black'" />
+      <KingWhite v-if="cell.piece === 'king_white'" />
+      <KingBlack v-if="cell.piece === 'king_black'" />
+      <KnightWhite v-if="cell.piece === 'knight_white'" />
+      <KnightBlack v-if="cell.piece === 'knight_black'" />
+      <PawnWhite v-if="cell.piece === 'pawn_white'" />
+      <PawnBlack v-if="cell.piece === 'pawn_black'" />
+      <QueenWhite v-if="cell.piece === 'queen_white'" />
+      <QueenBlack v-if="cell.piece === 'queen_black'" />
+      <RookWhite v-if="cell.piece === 'rook_white'" />
+      <RookBlack v-if="cell.piece === 'rook_black'" />
     </div>
   </div>  
 </template>
@@ -29,6 +40,20 @@ for (let i = 0; i < 8; i++) {
       color: (i + j) % 2 === 0 ? 'black' : 'white',
       piece: ''
     };
+
+    if (i === 6) cell.piece = 'pawn_white'
+    if (i === 1) cell.piece = 'pawn_black'
+    if (i === 0 && (j === 0 || j === 7)) cell.piece = 'rook_black';
+    if (i === 7 && (j === 0 || j === 7)) cell.piece = 'rook_white';
+    if (i === 0 && j === 4) cell.piece = 'king_black';
+    if (i === 7 && j === 4) cell.piece = 'king_white';
+    if (i === 0 && j === 3 ) cell.piece = 'queen_black';
+    if (i === 7 && j === 3 ) cell.piece = 'queen_white';
+    if (i === 0 && (j === 1 || j === 6)) cell.piece = 'knight_black';
+    if (i === 7 && (j === 1 || j === 6)) cell.piece = 'knight_white';
+    if (i === 0 && (j === 2 || j === 5)) cell.piece = 'bishop_black';
+    if (i === 7 && (j === 2 || j === 5)) cell.piece = 'bishop_white';
+
     board.push(cell);
   }
 }
