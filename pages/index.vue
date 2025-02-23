@@ -78,6 +78,14 @@ let movePawn = (cell) => {
     startCell.value.y = cell.y + 1
     activeMoves.value.push(startCell.value)
     console.log({...activeMoves.value});
+  } else {
+    if(cell.y === 6) {
+      startCell.value.y = cell.y - 2
+      activeMoves.value.push({...startCell.value})
+    }
+    startCell.value.y = cell.y - 1
+    activeMoves.value.push(startCell.value)
+    console.log({...activeMoves.value});
   }
 }
 </script>
