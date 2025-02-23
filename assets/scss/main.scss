@@ -25,6 +25,16 @@
         height: 54px;
       }
     }
+    .can-move {
+      position: absolute;
+      left: calc(50% - 10px);
+      top: calc(50% - 10px);
+      width: 20px;
+      height: 20px;
+      background: #7B61FF;
+      opacity: 0.5;
+      border-radius: 50%;
+    }
   }  
   .white {
     background: #B7C0D8;

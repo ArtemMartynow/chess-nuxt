@@ -9,6 +9,7 @@
         'black': cell.color === 'black',
         'purple': cell.color === 'purple'
       }"
+      @click="move(cell)"
     >
       <BishopWhite v-if="cell.piece === 'bishop_white'" />
       <BishopBlack v-if="cell.piece === 'bishop_black'" />
@@ -22,6 +23,7 @@
       <QueenBlack v-if="cell.piece === 'queen_black'" />
       <RookWhite v-if="cell.piece === 'rook_white'" />
       <RookBlack v-if="cell.piece === 'rook_black'" />
+      <span :class="{ 'can-move': activeMoves.some(selectedCell => selectedCell.y === cell.y && selectedCell.x === cell.x)}"></span>
     </div>
   </div>  
 </template>
@@ -55,6 +57,27 @@ for (let i = 0; i < 8; i++) {
     if (i === 7 && (j === 2 || j === 5)) cell.piece = 'bishop_white';
 
     board.push(cell);
+  }
+}
+
+let move = (cell) => {
+  cellColor.value = cell.color
+  if (cell.piece !== '') {
+    cell.color = 'purple'
+  }
+  movePawn(cell)
+}
+
+let movePawn = (cell) => {
+  startCell.value = {...cell}
+  if (cell.piece === 'pawn_black') {
+    if(cell.y === 1) {
+      startCell.value.y = cell.y + 2
+      activeMoves.value.push({...startCell.value})
+    }
+    startCell.value.y = cell.y + 1
+    activeMoves.value.push(startCell.value)
+    console.log({...activeMoves.value});
   }
 }
 </script>
