@@ -32,6 +32,7 @@
 let board = reactive([])
 let startCell = ref(null)
 let cellColor = ref('')
+let isPieceSelected = ref(false)
 let activeMoves = ref([])
 
 for (let i = 0; i < 8; i++) {
@@ -39,7 +40,7 @@ for (let i = 0; i < 8; i++) {
     const cell = {
       x: j,
       y: i,
-      color: (i + j) % 2 === 0 ? 'black' : 'white',
+      color: (i + j) % 2 === 0 ? 'white' : 'black',
       piece: ''
     };
 
@@ -60,31 +61,54 @@ for (let i = 0; i < 8; i++) {
   }
 }
 
-let move = (cell) => {
-  cellColor.value = cell.color
-  if (cell.piece !== '') {
-    cell.color = 'purple'
-  }
-  movePawn(cell)
+let resetGameState = () => {
+  activeMoves.value = []
+  isPieceSelected.value = false
+  startCell.value = null
+  cellColor.value = ''
 }
 
-let movePawn = (cell) => {
-  startCell.value = {...cell}
+let move = (cell) => {
+  let resetCellColor = null
+  if (cell.piece !== '' && activeMoves.value !== [] && isPieceSelected.value === false) {
+    startCell.value = {...cell}
+    isPieceSelected.value = true
+    cellColor.value = cell.color
+    cell.color = 'purple'
+    if(cell.piece === 'pawn_black' || cell.piece === 'pawn_white') movesPawn(cell)
+  } else if (activeMoves.value.some(item => item.x === cell.x && item.y === cell.y)) {
+    resetCellColor = board.find(c => c.x === startCell.value.x && c.y === startCell.value.y)
+    resetCellColor.color = cellColor.value
+    resetCellColor.piece = ''
+    moveFigure(cell)
+  } else {
+    resetCellColor = board.find(c => c.x === startCell.value.x && c.y === startCell.value.y)
+    resetCellColor.color = cellColor.value
+    resetGameState()
+  }
+}
+
+let moveFigure = (cell) => {
+  cell.piece = startCell.value.piece
+  resetGameState()
+}
+
+let movesPawn = (cell) => {
+  let moveCell = {...cell}
   if (cell.piece === 'pawn_black') {
     if(cell.y === 1) {
-      startCell.value.y = cell.y + 2
-      activeMoves.value.push({...startCell.value})
+      moveCell.y = cell.y + 2
+      activeMoves.value.push({...moveCell})
     }
-    startCell.value.y = cell.y + 1
-    activeMoves.value.push(startCell.value)
-    console.log({...activeMoves.value});
+    moveCell.y = cell.y + 1
+    activeMoves.value.push(moveCell)
   } else {
     if(cell.y === 6) {
-      startCell.value.y = cell.y - 2
-      activeMoves.value.push({...startCell.value})
+      moveCell.y = cell.y - 2
+      activeMoves.value.push({...moveCell})
     }
-    startCell.value.y = cell.y - 1
-    activeMoves.value.push(startCell.value)
+    moveCell.y = cell.y - 1
+    activeMoves.value.push(moveCell)
   }
 }
 </script>
