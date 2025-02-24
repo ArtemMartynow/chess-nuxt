@@ -77,12 +77,12 @@ let move = (cell) => {
     cell.color = 'purple'
     if(cell.piece === 'pawn_black' || cell.piece === 'pawn_white') movesPawn(cell)
   } else if (activeMoves.value.some(item => item.x === cell.x && item.y === cell.y)) {
-    resetCellColor = board.find(c => c.x === startCell.value.x && c.y === startCell.value.y)
+    resetCellColor = board.find(i => i.x === startCell.value.x && i.y === startCell.value.y)
     resetCellColor.color = cellColor.value
     resetCellColor.piece = ''
     moveFigure(cell)
   } else {
-    resetCellColor = board.find(c => c.x === startCell.value.x && c.y === startCell.value.y)
+    resetCellColor = board.find(i => i.x === startCell.value.x && i.y === startCell.value.y)
     resetCellColor.color = cellColor.value
     resetGameState()
   }
@@ -95,20 +95,30 @@ let moveFigure = (cell) => {
 
 let movesPawn = (cell) => {
   let moveCell = {...cell}
-  if (cell.piece === 'pawn_black') {
-    if(cell.y === 1) {
-      moveCell.y = cell.y + 2
-      activeMoves.value.push({...moveCell})
+  let direction = cell.piece === 'pawn_black' ? 1 : -1
+  let moves = [
+    {x: 0, y: 1 * direction},
+    {x: 1, y: 1 * direction},
+    {x: -1, y: 1 * direction}
+  ]
+
+  moves.forEach(movesCell => {
+    movesCell.x = movesCell.x + startCell.value.x
+    movesCell.y = movesCell.y + startCell.value.y
+    let targetCell = board.find(i => i.x === movesCell.x && i.y === movesCell.y)
+    if (targetCell.x === startCell.value.x && targetCell.piece === '') {
+      activeMoves.value.push(targetCell)        
+    } else if (
+      targetCell.x !== startCell.value.x && 
+      targetCell.piece !== '' && 
+      targetCell.piece.slice(-5) !== startCell.value.piece.slice(-5)
+    ) {
+      activeMoves.value.push(targetCell)        
     }
-    moveCell.y = cell.y + 1
-    activeMoves.value.push(moveCell)
-  } else {
-    if(cell.y === 6) {
-      moveCell.y = cell.y - 2
-      activeMoves.value.push({...moveCell})
-    }
-    moveCell.y = cell.y - 1
-    activeMoves.value.push(moveCell)
+  })
+  if (cell.y === 1 || cell.y === 6) {
+    moveCell.y = cell.y + (2 * direction)
+    activeMoves.value.push({...moveCell})
   }
 }
 </script>
