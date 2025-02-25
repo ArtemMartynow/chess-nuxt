@@ -117,8 +117,12 @@ let movesPawn = (cell) => {
     }
   })
   if (cell.y === 1 || cell.y === 6) {
-    moveCell.y = cell.y + (2 * direction)
-    activeMoves.value.push({...moveCell})
+    let firstStep = board.find(i => i.x === cell.x && i.y === cell.y + (1 * direction))
+    let secondStep = board.find(i => i.x === cell.x && i.y === cell.y + (2 * direction))
+
+    if (firstStep.piece === '' && secondStep.piece === '') {
+      activeMoves.value.push(secondStep)
+    }
   }
 }
 </script>
