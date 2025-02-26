@@ -23,17 +23,17 @@
       <QueenBlack v-if="cell.piece === 'queen_black'" />
       <RookWhite v-if="cell.piece === 'rook_white'" />
       <RookBlack v-if="cell.piece === 'rook_black'" />
-      <span :class="{ 'can-move': activeMoves.some(selectedCell => selectedCell.y === cell.y && selectedCell.x === cell.x)}"></span>
+      <span :class="{ 'can-move': mainStore.activeMoves.some(selectedCell => selectedCell.y === cell.y && selectedCell.x === cell.x)}"></span>
     </div>
   </div>  
 </template>
 
 <script setup>
+const mainStore = useMainStore()
+
 let board = reactive([])
-let startCell = ref(null)
 let cellColor = ref('')
 let isPieceSelected = ref(false)
-let activeMoves = ref([])
 
 for (let i = 0; i < 8; i++) {
   for (let j = 0; j < 8; j++) {
@@ -62,39 +62,39 @@ for (let i = 0; i < 8; i++) {
 }
 
 let resetGameState = () => {
-  activeMoves.value = []
+  mainStore.setActiveMoves([])
   isPieceSelected.value = false
-  startCell.value = null
+  mainStore.setStartCell(null)
   cellColor.value = ''
 }
 
 let move = (cell) => {
   let resetCellColor = null
-  if (cell.piece !== '' && activeMoves.value !== [] && isPieceSelected.value === false) {
-    startCell.value = {...cell}
+  if (cell.piece !== '' && mainStore.activeMoves !== [] && isPieceSelected.value === false) {
+    mainStore.setSelectedFigure(cell.piece)
+    mainStore.setStartCell(cell)
     isPieceSelected.value = true
     cellColor.value = cell.color
     cell.color = 'purple'
     if(cell.piece === 'pawn_black' || cell.piece === 'pawn_white') movesPawn(cell)
-  } else if (activeMoves.value.some(item => item.x === cell.x && item.y === cell.y)) {
-    resetCellColor = board.find(i => i.x === startCell.value.x && i.y === startCell.value.y)
+  } else if (mainStore.activeMoves.some(item => item.x === cell.x && item.y === cell.y)) {
+    resetCellColor = board.find(i => i.x === mainStore.startCell.x && i.y === mainStore.startCell.y)
     resetCellColor.color = cellColor.value
     resetCellColor.piece = ''
     moveFigure(cell)
   } else {
-    resetCellColor = board.find(i => i.x === startCell.value.x && i.y === startCell.value.y)
+    resetCellColor = board.find(i => i.x === mainStore.startCell.x && i.y === mainStore.startCell.y)
     resetCellColor.color = cellColor.value
     resetGameState()
   }
 }
 
 let moveFigure = (cell) => {
-  cell.piece = startCell.value.piece
+  cell.piece = mainStore.selectedFigure
   resetGameState()
 }
 
 let movesPawn = (cell) => {
-  let moveCell = {...cell}
   let direction = cell.piece === 'pawn_black' ? 1 : -1
   let moves = [
     {x: 0, y: 1 * direction},
@@ -103,17 +103,17 @@ let movesPawn = (cell) => {
   ]
 
   moves.forEach(movesCell => {
-    movesCell.x = movesCell.x + startCell.value.x
-    movesCell.y = movesCell.y + startCell.value.y
+    movesCell.x = movesCell.x + mainStore.startCell.x
+    movesCell.y = movesCell.y + mainStore.startCell.y
     let targetCell = board.find(i => i.x === movesCell.x && i.y === movesCell.y)
-    if (targetCell.x === startCell.value.x && targetCell.piece === '') {
-      activeMoves.value.push(targetCell)        
+    if (targetCell.x === mainStore.startCell.x && targetCell.piece === '') {
+      mainStore.activeMoves.push(targetCell)        
     } else if (
-      targetCell.x !== startCell.value.x && 
+      targetCell.x !== mainStore.startCell.x && 
       targetCell.piece !== '' && 
-      targetCell.piece.slice(-5) !== startCell.value.piece.slice(-5)
+      targetCell.piece.slice(-5) !== mainStore.startCell.piece.slice(-5)
     ) {
-      activeMoves.value.push(targetCell)        
+      mainStore.activeMoves.push(targetCell)        
     }
   })
   if (cell.y === 1 || cell.y === 6) {
@@ -121,7 +121,7 @@ let movesPawn = (cell) => {
     let secondStep = board.find(i => i.x === cell.x && i.y === cell.y + (2 * direction))
 
     if (firstStep.piece === '' && secondStep.piece === '') {
-      activeMoves.value.push(secondStep)
+      mainStore.activeMoves.push(secondStep)
     }
   }
 }
