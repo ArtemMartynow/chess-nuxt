@@ -36,8 +36,11 @@
         :board="board"
         :piece="cell.piece"  
       />
-      <RookWhite v-if="cell.piece === 'rook_white'" />
-      <RookBlack v-if="cell.piece === 'rook_black'" />
+      <Rook 
+        v-if="cell.piece === 'rook_black' || cell.piece === 'rook_white'" 
+        :board="board"
+        :piece="cell.piece"  
+      />
       <span :class="{ 'can-move': mainStore.activeMoves.some(selectedCell => selectedCell.y === cell.y && selectedCell.x === cell.x)}"></span>
     </div>
   </div>  
