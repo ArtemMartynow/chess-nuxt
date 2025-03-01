@@ -15,15 +15,13 @@
       <BishopBlack v-if="cell.piece === 'bishop_black'" />
       <KingWhite v-if="cell.piece === 'king_white'" />
       <KingBlack v-if="cell.piece === 'king_black'" />
-      <KnightWhite v-if="cell.piece === 'knight_white'" />
-      <KnightBlack v-if="cell.piece === 'knight_black'" />
-      <Pawn 
-        v-if="cell.piece === 'pawn_white'" 
+      <Knight 
+        v-if="cell.piece === 'knight_black' || cell.piece === 'knight_white'" 
         :board="board"
         :piece="cell.piece"  
       />
       <Pawn 
-        v-if="cell.piece === 'pawn_black'" 
+        v-if="cell.piece === 'pawn_black' || cell.piece === 'pawn_white'" 
         :board="board"
         :piece="cell.piece"  
       />
