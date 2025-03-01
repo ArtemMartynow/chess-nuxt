@@ -11,8 +11,11 @@
       }"
       @click="move(cell)"
     >
-      <BishopWhite v-if="cell.piece === 'bishop_white'" />
-      <BishopBlack v-if="cell.piece === 'bishop_black'" />
+      <Bishop 
+        v-if="cell.piece === 'bishop_black' || cell.piece === 'bishop_white'" 
+        :board="board"
+        :piece="cell.piece"  
+      />
       <King 
         v-if="cell.piece === 'king_black' || cell.piece === 'king_white'" 
         :board="board"

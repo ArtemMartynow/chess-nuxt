@@ -1,6 +1,6 @@
 <template>
   <div class="figure">
-    <NuxtImg :src="props.piece === 'king_black' ? '/images/king-black.svg' : '/images/king-white.svg'" alt="king" />
+    <NuxtImg :src="props.piece === 'bishop_black' ? '/images/bishop-black.svg' : '/images/bishop-white.svg'" alt="bishop" />
   </div>
 </template>
 
