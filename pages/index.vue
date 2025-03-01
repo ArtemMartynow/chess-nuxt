@@ -13,8 +13,11 @@
     >
       <BishopWhite v-if="cell.piece === 'bishop_white'" />
       <BishopBlack v-if="cell.piece === 'bishop_black'" />
-      <KingWhite v-if="cell.piece === 'king_white'" />
-      <KingBlack v-if="cell.piece === 'king_black'" />
+      <King 
+        v-if="cell.piece === 'king_black' || cell.piece === 'king_white'" 
+        :board="board"
+        :piece="cell.piece"  
+      />
       <Knight 
         v-if="cell.piece === 'knight_black' || cell.piece === 'knight_white'" 
         :board="board"
