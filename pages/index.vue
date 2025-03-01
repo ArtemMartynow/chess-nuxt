@@ -17,8 +17,16 @@
       <KingBlack v-if="cell.piece === 'king_black'" />
       <KnightWhite v-if="cell.piece === 'knight_white'" />
       <KnightBlack v-if="cell.piece === 'knight_black'" />
-      <PawnWhite v-if="cell.piece === 'pawn_white'" />
-      <PawnBlack v-if="cell.piece === 'pawn_black'" />
+      <Pawn 
+        v-if="cell.piece === 'pawn_white'" 
+        :board="board"
+        :piece="cell.piece"  
+      />
+      <Pawn 
+        v-if="cell.piece === 'pawn_black'" 
+        :board="board"
+        :piece="cell.piece"  
+      />
       <QueenWhite v-if="cell.piece === 'queen_white'" />
       <QueenBlack v-if="cell.piece === 'queen_black'" />
       <RookWhite v-if="cell.piece === 'rook_white'" />
@@ -76,7 +84,6 @@ let move = (cell) => {
     isPieceSelected.value = true
     cellColor.value = cell.color
     cell.color = 'purple'
-    if(cell.piece === 'pawn_black' || cell.piece === 'pawn_white') movesPawn(cell)
   } else if (mainStore.activeMoves.some(item => item.x === cell.x && item.y === cell.y)) {
     resetCellColor = board.find(i => i.x === mainStore.startCell.x && i.y === mainStore.startCell.y)
     resetCellColor.color = cellColor.value
@@ -94,35 +101,4 @@ let moveFigure = (cell) => {
   resetGameState()
 }
 
-let movesPawn = (cell) => {
-  let direction = cell.piece === 'pawn_black' ? 1 : -1
-  let moves = [
-    {x: 0, y: 1 * direction},
-    {x: 1, y: 1 * direction},
-    {x: -1, y: 1 * direction}
-  ]
-
-  moves.forEach(movesCell => {
-    movesCell.x = movesCell.x + mainStore.startCell.x
-    movesCell.y = movesCell.y + mainStore.startCell.y
-    let targetCell = board.find(i => i.x === movesCell.x && i.y === movesCell.y)
-    if (targetCell.x === mainStore.startCell.x && targetCell.piece === '') {
-      mainStore.activeMoves.push(targetCell)        
-    } else if (
-      targetCell.x !== mainStore.startCell.x && 
-      targetCell.piece !== '' && 
-      targetCell.piece.slice(-5) !== mainStore.startCell.piece.slice(-5)
-    ) {
-      mainStore.activeMoves.push(targetCell)        
-    }
-  })
-  if (cell.y === 1 || cell.y === 6) {
-    let firstStep = board.find(i => i.x === cell.x && i.y === cell.y + (1 * direction))
-    let secondStep = board.find(i => i.x === cell.x && i.y === cell.y + (2 * direction))
-
-    if (firstStep.piece === '' && secondStep.piece === '') {
-      mainStore.activeMoves.push(secondStep)
-    }
-  }
-}
 </script>
