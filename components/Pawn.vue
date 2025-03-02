@@ -36,7 +36,11 @@ let movesPawn = (cell) => {
   moves.forEach(movesCell => {
     movesCell.x = movesCell.x + mainStore.startCell.x
     movesCell.y = movesCell.y + mainStore.startCell.y
+
     let targetCell = props.board.find(i => i.x === movesCell.x && i.y === movesCell.y)
+
+    if (!targetCell) return
+
     if (targetCell.x === mainStore.startCell.x && targetCell.piece === '') {
       mainStore.activeMoves.push(targetCell)        
     } else if (
