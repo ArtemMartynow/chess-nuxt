@@ -4,7 +4,8 @@ export const useMainStore = defineStore('mainStore', {
   state: () => ({
     startCell: null,
     activeMoves: [],
-    selectedFigure: ''
+    selectedFigure: '',
+    cellColor: ''
   }),
   actions: {
     setStartCell(cell) {
@@ -15,6 +16,9 @@ export const useMainStore = defineStore('mainStore', {
     },
     setSelectedFigure(figure) {
       this.selectedFigure = figure
+    },
+    setCellColor(color) {
+      this.cellColor = color
     }
   }
 })

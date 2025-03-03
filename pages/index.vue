@@ -14,7 +14,7 @@
       <Bishop 
         v-if="cell.piece === 'bishop_black' || cell.piece === 'bishop_white'" 
         :board="board"
-        :piece="cell.piece"  
+        :piece="cell.piece"
       />
       <King 
         v-if="cell.piece === 'king_black' || cell.piece === 'king_white'" 
@@ -50,7 +50,6 @@
 const mainStore = useMainStore()
 
 let board = reactive([])
-let cellColor = ref('')
 let isPieceSelected = ref(false)
 
 for (let i = 0; i < 8; i++) {
@@ -83,7 +82,7 @@ let resetGameState = () => {
   mainStore.setActiveMoves([])
   isPieceSelected.value = false
   mainStore.setStartCell(null)
-  cellColor.value = ''
+  mainStore.setCellColor('')
 }
 
 let move = (cell) => {
@@ -92,16 +91,16 @@ let move = (cell) => {
     mainStore.setSelectedFigure(cell.piece)
     mainStore.setStartCell(cell)
     isPieceSelected.value = true
-    cellColor.value = cell.color
+    mainStore.setCellColor(cell.color)
     cell.color = 'purple'
   } else if (mainStore.activeMoves.some(item => item.x === cell.x && item.y === cell.y)) {
     resetCellColor = board.find(i => i.x === mainStore.startCell.x && i.y === mainStore.startCell.y)
-    resetCellColor.color = cellColor.value
+    resetCellColor.color = mainStore.cellColor
     resetCellColor.piece = ''
     moveFigure(cell)
   } else {
     resetCellColor = board.find(i => i.x === mainStore.startCell.x && i.y === mainStore.startCell.y)
-    resetCellColor.color = cellColor.value
+    resetCellColor.color = mainStore.cellColor
     resetGameState()
   }
 }
