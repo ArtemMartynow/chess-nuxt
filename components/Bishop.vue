@@ -10,7 +10,6 @@ const mainStore = useMainStore()
 const props = defineProps({
   board: Array,
   piece: String,
-  cellColor: String
 })
 
 watch(
